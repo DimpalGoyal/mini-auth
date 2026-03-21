@@ -12,8 +12,12 @@
       type="password"
       placeholder="enter your password"
     /><br /><br />
-    <button id="btn" onclick="login()">sign up</button>
+    <button id="btn" onclick="login()">sign up</button><br /><br />
     <div id="container"></div>
+    <br /><br />
+    <input id="tokenBox" placeholder="token" type="text" />
+    <button id="tokenBtn" onclick="tokenGen()">check token</button>
+    <div id="tokenContainer"></div>
   </body>
   <script>
     async function login() {
@@ -27,9 +31,23 @@
         body: JSON.stringify({ email, password }),
       });
 
-      const text = await res.text();
+      const token = await res.text();
+      console.log(token)
+    }
 
-      container.innerText = text;
+    async function tokenGen() {
+      const userToken = document.getElementById("tokenBox").value;
+      const tokenContainer = document.getElementById("tokenContainer");
+
+      const res = await fetch("/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userToken }),
+      });
+
+      const tokenText = await res.text();
+
+      tokenContainer.innerText = tokenText;
     }
   </script>
 </html>

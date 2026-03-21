@@ -1,5 +1,6 @@
 const express = require("express");
 const z = require("zod");
+const jwt = require("jsonwebtoken");
 const app = express();
 
 app.use(express.json());
@@ -24,7 +25,22 @@ app.post("/auth", (req, res) => {
 
   // simple check
   if (email === "dimpu123@gmail.com" && password === "dimpu123") {
-    return res.send("login successful");
+    const token = jwt.sign({ email }, "1234");
+    return res.send(token);
+  }
+});
+
+app.post("/verify", (req, res) => {
+  const { userToken } = req.body;
+  if (!userToken) {
+    return res.send("no token provided");
+  }
+
+  try {
+    const decoded = jwt.verify(userToken, "1234");
+    return res.send(decoded);
+  } catch {
+    return res.send("invlaid token");
   }
 });
 

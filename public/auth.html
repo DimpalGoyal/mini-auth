@@ -39,7 +39,8 @@
       });
 
       const token = await res.text();
-      console.log(token)
+      localStorage.setItem("token", token)
+      console.log({"token": token})
     }
 
     async function tokenGen() {
